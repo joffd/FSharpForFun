@@ -38,11 +38,15 @@ module Calendar
         let mutable tmp = startD
         let mutable i = 0
 
-        for i in 0..1..maxD do
-            tmp <- startD.AddDays((float) i)
+        let listDays =
+            [0..maxD]
+            |> List.map (fun i -> startD.AddDays((float) i))
+
+        for d in listDays do
+            
             let mutable hol = true
             for cal in seqCalendar do
-                if (isBusinessDay cal tmp) then
+                if (isBusinessDay cal d) then
                     hol <- false
             if hol = false then
                 res <- res @ [tmp]
@@ -96,11 +100,11 @@ module Calendar
 
 
     // TEST
-    let d = DateTime(1001,1,1)
+    let d = DateTime(1990,1,1)
     let m = 73000 //730000
     let n = 20000 // 200000
 
-    let listcal = createNRandomCalendar d m n 3
+    let listcal = createNRandomCalendar d m n 5
 
     let resImp = buildWorkingDaysListImperative d m listcal
 
