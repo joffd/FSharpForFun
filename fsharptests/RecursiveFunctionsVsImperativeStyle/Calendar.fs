@@ -35,12 +35,11 @@ module Calendar
 
     let buildWorkingDaysListImperative (startD : DateTime) (maxD: int) (seqCalendar: Calendar list) =
         let mutable res = []
-        let mutable tmp = startD
-        let mutable i = 0
 
         let listDays =
             [0..maxD]
             |> List.map (fun i -> startD.AddDays((float) i))
+
 
         for d in listDays do
             
@@ -49,7 +48,7 @@ module Calendar
                 if (isBusinessDay cal d) then
                     hol <- false
             if hol = false then
-                res <- res @ [tmp]
+                res <- res @ [d]
 
         res
 
@@ -71,12 +70,7 @@ module Calendar
             |> List.rev
             |> List.map (fun i -> startD.AddDays((float) i))
 
-        //Console.WriteLine("nb")
-        //Console.WriteLine(listdays.Length.ToString())
-
-
         let rec builList acc (l: DateTime list) =
-            //Console.WriteLine(l.Length.ToString())
             match l with
             | [] -> acc
             | x::r -> match (checkSeqHoldays x) with
