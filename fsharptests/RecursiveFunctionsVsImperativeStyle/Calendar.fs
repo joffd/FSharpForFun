@@ -5,11 +5,17 @@ module Calendar
     open System
 
     // Calendar Type
-    type public Calendar = { weekendDays:System.DayOfWeek Set; holidays:System.DateTime Set }
+    type public Calendar = 
+        { weekendDays:System.DayOfWeek Set; holidays:System.DateTime Set }
+
+    let cal = 
+        { weekendDays = [DayOfWeek.Saturday ; DayOfWeek.Sunday] |> Set.ofList ;
+          holidays = Set.empty }
+    
 
     let randomInt m =
         let R = System.Random()
-        fun n -> [|for _ in 1..n -> R.Next(m)|] |> Array.distinct
+        fun n -> [|for _ in 1..n -> R.Next(m)|] |> Array.distinct |> Array.sort
 
 
     let createNRandomCalendar (dStart: DateTime) (endDay: int) (nbDraw: int) (nbCal: int) : Calendar list =
@@ -18,19 +24,23 @@ module Calendar
             match d.DayOfWeek with
             | DayOfWeek.Saturday | DayOfWeek.Sunday -> None
             | _ -> Some d
+
+
         [1..nbCal]
         |> List.map (fun _ ->
                     randomInt endDay nbDraw
                     |> Array.map (fun x -> dStart.AddDays((float) x))
                     |> Array.choose checkWeekday
                     |> Set.ofArray
-                    |> (fun x -> { weekendDays = [DayOfWeek.Saturday ; DayOfWeek.Sunday] |> Set.ofList
+                    |> (fun x -> { weekendDays = [DayOfWeek.Saturday ; DayOfWeek.Sunday]
+                                   |> Set.ofList
                                    holidays = x }))
 
 
 
     let public isBusinessDay  calendar (date:System.DateTime) = 
-        not (calendar.weekendDays.Contains date.DayOfWeek || calendar.holidays.Contains date)
+        not (calendar.weekendDays.Contains date.DayOfWeek 
+                || calendar.holidays.Contains date)
 
 
     let buildWorkingDaysListImperative (startD : DateTime) (maxD: int) (seqCalendar: Calendar list) =
@@ -78,6 +88,26 @@ module Calendar
                       | true  -> builList acc r
 
         builList [] listdays
+
+    let buildWorkingDaysListChoose (startD : DateTime) (maxD: int) (seqCalendar: Calendar list) =
+        
+        let (++) (b1: bool) (b2: bool) =
+            match (b1,b2) with
+            | (true, true) -> true
+            | _            -> false
+
+        let checkSeqHoldays d =
+            seqCalendar
+            |> List.map (fun x -> not (isBusinessDay x d))
+            |> List.fold (++) true
+            |> fun x -> match x with
+                        | false -> Some d
+                        | true  -> None
+
+
+        [0..1..maxD]
+        |> List.map (fun i -> startD.AddDays((float) i))
+        |> List.choose checkSeqHoldays
 
             
 

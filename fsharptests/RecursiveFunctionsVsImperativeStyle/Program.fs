@@ -28,6 +28,9 @@ module ExecBench =
         member __.Recursive() =
             buildWorkingDaysListRec d m listcal
 
+        [<Benchmark>]
+        member __.Choose() =
+            buildWorkingDaysListChoose d m listcal
 
 [<EntryPoint>]
 let main argv =
@@ -60,10 +63,13 @@ let main argv =
     
     let resRec = buildWorkingDaysListRec d m listcal
 
+    let resChoose = buildWorkingDaysListChoose d m listcal
+
     
-    let eq = (resImp = resRec)
-    Console.WriteLine(eq.ToString())
-    
+    let eq1 = (resImp = resRec)
+    let eq2 = (resRec = resChoose)
+    Console.WriteLine("Imperative vs Rec. Same result? " + eq1.ToString())
+    Console.WriteLine("Choose vs Rec. Same result? " + eq2.ToString())
     
     w.Close()
     
