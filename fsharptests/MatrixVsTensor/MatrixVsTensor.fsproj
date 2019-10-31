@@ -20,8 +20,8 @@
     <PackageReference Include="Deedle" Version="2.0.4" />
     <PackageReference Include="Deedle.RPlugin" Version="2.0.4" />
     <PackageReference Include="FSharp.Collections.ParallelSeq" Version="1.1.2" />
-    <PackageReference Include="MathNet.Numerics" Version="4.8.0" />
-    <PackageReference Include="MathNet.Numerics.FSharp" Version="4.8.0" />
+    <PackageReference Include="MathNet.Numerics" Version="4.8.1" />
+    <PackageReference Include="MathNet.Numerics.FSharp" Version="4.8.1" />
     <PackageReference Include="Tensor" Version="0.4.11" />
   </ItemGroup>
 
