@@ -1,16 +1,16 @@
 ﻿
-
 module Calendar
 
     open System
 
     // Calendar Type
-    type public Calendar = 
-        { weekendDays:System.DayOfWeek Set; holidays:System.DateTime Set }
+    type public Calendar = {
+        WeekendDays : DayOfWeek Set
+        Holidays : DateTime Set }
 
-    let cal = 
-        { weekendDays = [DayOfWeek.Saturday ; DayOfWeek.Sunday] |> Set.ofList ;
-          holidays = Set.empty }
+    let cal = {
+        WeekendDays = [DayOfWeek.Saturday ; DayOfWeek.Sunday] |> Set.ofList
+        Holidays = Set.empty }
     
 
     let randomInt m =
@@ -32,15 +32,15 @@ module Calendar
                     |> Array.map (fun x -> dStart.AddDays((float) x))
                     |> Array.choose checkWeekday
                     |> Set.ofArray
-                    |> (fun x -> { weekendDays = [DayOfWeek.Saturday ; DayOfWeek.Sunday]
+                    |> (fun x -> { WeekendDays = [DayOfWeek.Saturday ; DayOfWeek.Sunday]
                                    |> Set.ofList
-                                   holidays = x }))
+                                   Holidays = x }))
 
 
 
     let public isBusinessDay  calendar (date:System.DateTime) = 
-        not (calendar.weekendDays.Contains date.DayOfWeek 
-                || calendar.holidays.Contains date)
+        not (calendar.WeekendDays.Contains date.DayOfWeek 
+                || calendar.Holidays.Contains date)
 
 
     let buildWorkingDaysListImperative (startD : DateTime) (maxD: int) (seqCalendar: Calendar list) =
