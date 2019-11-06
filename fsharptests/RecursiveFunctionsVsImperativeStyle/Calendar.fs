@@ -84,8 +84,8 @@ module Calendar
             match l with
             | [] -> acc
             | x::r -> match (checkSeqHoldays x) with
-                      | false -> builList ([x]@acc) r
-                      | true  -> builList acc r
+                        | false -> builList ([x]@acc) r
+                        | true  -> builList acc r
 
         builList [] listdays
 
